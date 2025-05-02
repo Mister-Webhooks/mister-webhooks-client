@@ -1,0 +1,13 @@
+{
+  "consumer_name": "jessekempf.herpy",
+  "auth": {
+    "mechanism": "plain",
+    "secret": "derpy"
+  },
+  "kafka": {
+    "topic": "incoming.jessekempf.github.mister-kafka",
+    "servers": [
+      "localhost:9092"
+    ]
+  }
+}

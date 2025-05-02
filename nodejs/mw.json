@@ -1,0 +1,12 @@
+{
+  "consumer_name": "jessekempf.herpy",
+  "auth": {
+    "mechanism": "plain",
+    "secret": "derpy"
+  },
+  "kafka": {
+    "servers": [
+      "localhost:9092"
+    ]
+  }
+}
