@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gemspec
+
+gem "standard", "~> 1.50"
+gem "awesome_print", "1.9.2"
+gem "yard", "~> 0.9.37"
