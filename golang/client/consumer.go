@@ -30,6 +30,7 @@ func NewConsumer[T any](profile *ConnectionProfile, topic WebhookTopic[T]) (*Con
 		mrkConsumer.WithControlChannel[misterWebhooksEvent[T]](
 			mrkConsumer.StopOnSignals([]syscall.Signal{syscall.SIGINT}),
 		),
+		mrkConsumer.WithAutoOffsetResetEarliest[misterWebhooksEvent[T]](),
 	)
 
 	return &Consumer[T]{

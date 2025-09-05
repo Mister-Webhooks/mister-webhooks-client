@@ -72,6 +72,7 @@ class MisterWebhooksConsumer:
             allow_auto_create_topics=False,
             security_protocol="SASL_SSL",
             ssl_context=new_ssl_client_context(),
+            auto_offset_reset="earliest",
             **auth,
         )
 

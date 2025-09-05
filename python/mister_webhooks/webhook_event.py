@@ -106,6 +106,6 @@ class WebhookEvent:
         return WebhookEvent(
             HTTPMethod[envelope["method"]],
             timestamp,
-            {k: vs for (k, vs) in envelope["headers"]},
+            envelope["headers"],
             body,
         )

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import List, Literal, Optional, Tuple, TypedDict
+from typing import Dict, List, Literal, Optional, Tuple, TypedDict
 import avro.io
 import avro.schema
 
@@ -55,7 +55,7 @@ class Encoding(Enum):
 class KafkaMessageEnvelopeV1(TypedDict):
     encoding: Literal["JSON", "CBOR"]
     method: Literal["GET", "HEAD", "POST", "PUT", "DELETE", "PATCH"]
-    headers: List[Tuple[str, List[bytes]]]
+    headers: Dict[str, List[bytes]]
     payload: bytes
 
 
