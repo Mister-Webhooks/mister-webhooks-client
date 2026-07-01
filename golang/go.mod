@@ -7,7 +7,7 @@ toolchain go1.24.1
 require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/jessekempf/kafka-go v0.4.47-jessekempf-p3
-	github.com/jessekempf/mister-kafka v0.0.14
+	github.com/jessekempf/mister-kafka v0.0.15
 	github.com/stretchr/testify v1.10.0
 )
 
