@@ -21,7 +21,7 @@ export type ConnectionProfileConfig = {
   }
 }
 
-type MessagePayload<MessageType> = {
+export type MessagePayload<MessageType> = {
   topic: string
   partition: number
   offset: MessageOffset
