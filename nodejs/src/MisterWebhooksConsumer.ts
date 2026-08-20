@@ -5,10 +5,13 @@ import {
   ConsumerCrashEvent,
   Consumer,
   EachMessageHandler,
+  Logger,
 } from 'kafkajs'
 import { MessageOffset } from './MessageOffset'
 import { decodeMessage } from './decodeMessage'
 import { CACERT } from './CACERT'
+
+export { logLevel, Logger } from 'kafkajs'
 
 export type ConnectionProfileConfig = {
   consumer_name: string
@@ -32,6 +35,7 @@ export type MessagePayload<MessageType> = {
 }
 
 export type MessageProcessor<MessageType = unknown> = (
+  logger: Logger,
   parameters: MessagePayload<MessageType>
 ) => Promise<void>
 
@@ -72,6 +76,7 @@ export class MisterWebhooksConsumer<MessageType> extends EventEmitter<ExposedEve
   private readonly handler: MessageProcessor<MessageType>
   private startPromise: Promise<void> | undefined
   private readonly startPoint: StartPoint
+  private readonly handlerLogger: Logger
 
   constructor({
     config,
@@ -101,6 +106,8 @@ export class MisterWebhooksConsumer<MessageType> extends EventEmitter<ExposedEve
       },
       logLevel,
     })
+
+    this.handlerLogger = this.kafka.logger()
 
     this.consumer = this.kafka.consumer({
       groupId: config.consumer_name,
@@ -133,7 +140,7 @@ export class MisterWebhooksConsumer<MessageType> extends EventEmitter<ExposedEve
       return
     }
     const { decoded, headers, method } = decodeResult
-    await this.handler({
+    await this.handler(this.handlerLogger, {
       topic,
       partition,
       offset: MessageOffset.fromString(message.offset),
