@@ -1,0 +1,10 @@
+version: 2
+
+build:
+  os: ubuntu-22.04
+  tools:
+    ruby: latest
+  commands:
+    - gem install bundler
+    - bundle install --gemfile=ruby/Gemfile
+    - cd ruby && yard doc --output-dir $READTHEDOCS_OUTPUT/html

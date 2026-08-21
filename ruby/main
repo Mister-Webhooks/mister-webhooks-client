@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require "mister_webhooks"
+require "awesome_print"
+
+filename = ARGV[0] or (
+  puts "Usage: #{File.basename(__FILE__)} <connection_profile> <topic>"
+  exit(-1)
+)
+
+topic = ARGV[1] or (
+  puts "Usage: #{File.basename(__FILE__)} #{filename} <topic>"
+  exit(-1)
+)
+
+profile = MisterWebhooks::ConnectionProfile.from_file(filename)
+consumer = MisterWebhooks::Consumer.new(profile, topic)
+
+consumer.consume do |event|
+  ap event
+end
