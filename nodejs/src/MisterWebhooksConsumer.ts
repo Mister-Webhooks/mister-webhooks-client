@@ -10,6 +10,7 @@ import {
 import { MessageOffset } from './MessageOffset'
 import { decodeMessage } from './decodeMessage'
 import { CACERT } from './CACERT'
+import { setInterval } from 'node:timers/promises'
 
 export { logLevel, Logger } from 'kafkajs'
 
@@ -134,13 +135,14 @@ export class MisterWebhooksConsumer<MessageType> extends EventEmitter<ExposedEve
     }
   }
 
-  private handleMessage: EachMessageHandler = async ({ topic, message, partition }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  private handleMessage: EachMessageHandler = async ({ topic, message, partition, heartbeat }) => {
     const decodeResult = decodeMessage<MessageType>(message)
     if (!decodeResult) {
       return
     }
     const { decoded, headers, method } = decodeResult
-    await this.handler(this.handlerLogger, {
+    const handle = this.handler(this.handlerLogger, {
       topic,
       partition,
       offset: MessageOffset.fromString(message.offset),
@@ -149,6 +151,21 @@ export class MisterWebhooksConsumer<MessageType> extends EventEmitter<ExposedEve
       headers,
       message: decoded,
     })
+
+    const pendingState = 'pending'
+
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    for await (const _ of setInterval(100)) {
+      const outcome = await Promise.race([handle, pendingState])
+
+      if (outcome === pendingState) {
+        await heartbeat()
+        continue
+      }
+
+      await this.consumer.commitOffsets([{ topic, partition, offset: message.offset }])
+      break
+    }
   }
 
   private startInternal = async () => {

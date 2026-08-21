@@ -1,6 +1,6 @@
 {
   "name": "@mister-webhooks/client",
-  "version": "0.0.4-beta.0",
+  "version": "0.0.6",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
